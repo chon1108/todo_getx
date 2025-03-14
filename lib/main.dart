@@ -4,7 +4,6 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:todo_getx/firebase_options.dart';
 import 'package:todo_getx/services/storage_service.dart';
 import 'package:todo_getx/views/login_view.dart';
-import 'package:todo_getx/views/register_view.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
