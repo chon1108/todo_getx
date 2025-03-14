@@ -1,13 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo_getx/controllers/todo_controller.dart';
+import 'package:todo_getx/models/todo_model.dart';
 
-class AddTodoView extends StatelessWidget {
-  AddTodoView({super.key});
+class AddTodoView extends StatefulWidget {
+  AddTodoView({super.key, this.todo});
+  TodoModel? todo;
 
+  @override
+  State<AddTodoView> createState() => _AddTodoViewState();
+}
+
+class _AddTodoViewState extends State<AddTodoView> {
   final TodoController todoControler = Get.put(TodoController());
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    if (widget.todo != null) {
+      titleController.text = widget.todo!.title;
+      descriptionController.text = widget.todo!.description;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,11 +34,11 @@ class AddTodoView extends StatelessWidget {
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: const Color.fromARGB(255, 255, 255, 255),
             ),
           ),
         ),
-        backgroundColor: Color.fromRGBO(208, 3, 235, 0.898),
+        backgroundColor: Color.fromRGBO(51, 14, 56, 0.894),
         elevation: 10,
       ),
       body: Padding(
@@ -42,11 +57,11 @@ class AddTodoView extends StatelessWidget {
               SizedBox(height: 20),
 
               Text(
-                "ชื่อสินค้า",
+                widget.todo != null ? "แก้ไขรายการ" : "เพิ่มรายการ",
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 219, 3, 247),
+                  color: Color.fromARGB(255, 65, 5, 73),
                 ),
               ),
               SizedBox(height: 10),
@@ -59,8 +74,10 @@ class AddTodoView extends StatelessWidget {
                   ),
                   filled: true,
                   fillColor: Colors.white,
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                 ),
               ),
               SizedBox(height: 20),
@@ -82,29 +99,32 @@ class AddTodoView extends StatelessWidget {
                   ),
                   filled: true,
                   fillColor: Colors.white,
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                 ),
                 maxLines: 5, // Allow multiple lines for description
               ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  if (titleController.text.isNotEmpty &&
-                      descriptionController.text.isNotEmpty) {
+                  if (titleController.text.isEmpty) return;
+                  if (widget.todo != null) {
+                    widget.todo!.title = titleController.text;
+                    widget.todo!.description = descriptionController.text;
+                    todoControler.updateTodo(widget.todo!);
+                  } else {
                     todoControler.addTodo(
                       titleController.text,
                       descriptionController.text,
                     );
-                    Get.back();
-                  } else {
-                    Get.snackbar("Error", "Please fill out all fields",
-                        backgroundColor: Colors.redAccent,
-                        colorText: Colors.white);
                   }
+                  Get.back();
+                  Get.snackbar("สำเร็จ", "บันทึกสำเร็จ");
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromRGBO(3, 220, 235, 0.898),
+                  backgroundColor: Color.fromRGBO(81, 11, 90, 0.894),
                   padding: EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),

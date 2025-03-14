@@ -74,6 +74,7 @@ class Register extends StatelessWidget {
                   emailController.text,
                   passwordController.text,
                 );
+                Get.back();
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blueAccent,
